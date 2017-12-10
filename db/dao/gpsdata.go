@@ -3,18 +3,22 @@ package dao
 import (
 	"log"
 	"github.com/Projects/truck_gps_app/db/models"
-	mgo "gopkg.in/mgo.v2"
+	//mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"time"
+	"encoding/json"
+	"github.com/Projects/truck_gps_app/db/config"
 )
 
 //type MoviesDAO struct {
-	type GpsDAO struct {
+/*	type GpsDAO struct {
 	Server   string
 	Database string
 	Port int
-}
+}*/
 
-var db *mgo.Database
+//var db *mgo.Database
+//var db *mgo.Database
 
 const (
 //	COLLECTION = "movies"
@@ -23,55 +27,55 @@ const (
 
 // Establish a connection to database
 //func (m *MoviesDAO) Connect() {
-	func (m *GpsDAO) Connect() {
+	/*func (m *GpsDAO) Connect() {
 	session, err := mgo.Dial(m.Server)
 	if err != nil {
 		log.Fatal(err)
 	}
 	db = session.DB(m.Database)
-}
+}*/
 
 // Find list of movies
 //func (m *MoviesDAO) FindAll() ([]models.Movie, error) {
-func (m *GpsDAO) FindAll() ([]models.GPS, error) {
+func FindAll() ([]models.GPS, error) {
 	//var movies []models.GPS
 	var gps []models.GPS
-	err := db.C(COLLECTION).Find(bson.M{}).All(&gps)
+	err := config.MongoSession.C(COLLECTION).Find(bson.M{}).All(&gps)
 	return gps,err
 }
 
 // Find a movie by its id
 //func (m *MoviesDAO) FindById(id string) (models.Movie, error) {
-func (m *GpsDAO) FindById(id string) (models.GPS, error) {
+func FindById(id string) (models.GPS, error) {
 	//var movie models.GPS
 	var gp models.GPS
-	err := db.C(COLLECTION).FindId(bson.ObjectIdHex(id)).One(&gp)
+	err := config.MongoSession.C(COLLECTION).FindId(bson.ObjectIdHex(id)).One(&gp)
 	return gp, err
 }
 
 // Insert a movie into database
 //func (m *MoviesDAO) Insert(movie models.Movie) error {
-func (m *GpsDAO) Insert(gp models.GPS) error {
-	err := db.C(COLLECTION).Insert(&gp)
+func Insert(gp models.GPS) error {
+	err := config.MongoSession.C(COLLECTION).Insert(&gp)
 	return err
 }
 
 // Delete an existing movie
 //func (m *MoviesDAO) Delete(movie models.Movie) error {
-func (m *GpsDAO) Delete(gp models.GPS) error {
-	err := db.C(COLLECTION).Remove(&gp)
+func Delete(gp models.GPS) error {
+	err := config.MongoSession.C(COLLECTION).Remove(&gp)
 	return err
 }
 
 // Update an existing movie
 //func (m *MoviesDAO) Update(movie models.Movie) error {
-func (m *GpsDAO) Update(gp models.GPS) error {
-	err := db.C(COLLECTION).UpdateId(gp.ID, &gp)
+func Update(gp models.GPS) error {
+	err := config.MongoSession.C(COLLECTION).UpdateId(gp.ID, &gp)
 	return err
 }
 
 //aggregate data
-func testAggregate(){
+func TestAggregate(){
   var getCurrentTime = time.Now()
   var getHours=getCurrentTime.Hour()
   var lastTwoHour=getHours-2
@@ -93,7 +97,7 @@ func testAggregate(){
   //		bson.M{"date": 1},  //1: Ascending, -1: Descending
     //},
   }
-  pipe := db.C(COLLECTION).Pipe(pipeline)
+  pipe := config.MongoSession.C(COLLECTION).Pipe(pipeline)
 
   result := []bson.M{}
   //err := pipe.AllowDiskUse().All(&result) //allow disk use

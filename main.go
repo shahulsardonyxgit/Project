@@ -2,30 +2,31 @@ package main
 
 import (
 //	"strconv"
-	"fmt"
-	"encoding/json"
+	//"fmt"
+	//"encoding/json"
 	"log"
 	"net/http"
-	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
+	//"gopkg.in/mgo.v2"
+	//"gopkg.in/mgo.v2/bson"
 	"github.com/gorilla/mux"
 	"github.com/Projects/truck_gps_app/db/config"
-	"github.com/Projects/truck_gps_app/db/dao"
-	"github.com/Projects/truck_gps_app/db/models"
-	"github.com/spf13/viper"
-	"os"
-	"github.com/jasonlvhit/gocron"
+//	"github.com/Projects/truck_gps_app/db/dao"
+	//"github.com/Projects/truck_gps_app/db/models"
+	"github.com/Projects/truck_gps_app/handlers"
+	//"github.com/spf13/viper"
+	//"os"
+	//"github.com/jasonlvhit/gocron"
 )
 
-var Port1 string
-var config1 = config.Config{}
+//var Port1 string
+//var config1 = config.Config{}
 //var dao1 = dao.MoviesDAO{}
-var dao1 = dao.GpsDAO{}
+//var dao1 = dao.GpsDAO{}
 
 // Parse the configuration file 'config.toml', and establish a connection to DB
-func init() {
+/*func init() {
 //check default env variable
-	viper.SetDefault("PORT",1234)
+/*	viper.SetDefault("PORT",1234)
   getPort := viper.GetInt("PORT")
 	//viper.SetDefault("SERVER", "localhost")
   getServer := config1.Server
@@ -41,36 +42,37 @@ func init() {
 			dao1.Server=getServer
 			dao1.Database=getDatabase
 			dao1.Port=getPort
-		} else {
+		} else {*/
 //read env variables from the file
-	config1.Read()
+	/*config1.Read()
 	dao1.Server = config1.Server
 	dao1.Database = config1.Database
 	dao1.Port=config1.Port
 	Port1=fmt.Sprintf(":%d", dao1.Port)
 	dao1.Connect()
+*/
+//}//end of if else
 
-}//end of if else
-
-}//end of func show
-show("USER")
-}//end of init
+//}//end of func show
+//show("USER")
+//}*///end of init
 // Define HTTP request routes
 func main() {
 	r := mux.NewRouter()
 //code for cron every Minutes
-	s := gocron.NewScheduler()
-  s.Every(1).Minutes().Do(testAggregate)
-  <- s.Start()
 
-	r.HandleFunc("/gps", AllGPSEndPoint).Methods("GET")
-	r.HandleFunc("/gps", CreateGPSEndPoint).Methods("POST")
-	r.HandleFunc("/gps", UpdateGPSEndPoint).Methods("PUT")
-	r.HandleFunc("/gps", DeleteGPSEndPoint).Methods("DELETE")
-	r.HandleFunc("/gps/{id}", FindGPSEndpoint).Methods("GET")
-	if err := http.ListenAndServe(Port1, r); err != nil {
+
+	r.HandleFunc("/gps", gpsHandlers.AllGPSEndPoint).Methods("GET")
+	r.HandleFunc("/gps", gpsHandlers.CreateGPSEndPoint).Methods("POST")
+	r.HandleFunc("/gps", gpsHandlers.UpdateGPSEndPoint).Methods("PUT")
+	r.HandleFunc("/gps", gpsHandlers.DeleteGPSEndPoint).Methods("DELETE")
+	r.HandleFunc("/gps/{id}", gpsHandlers.FindGPSEndpoint).Methods("GET")
+	if err := http.ListenAndServe(config.Port1, r); err != nil {
 		log.Fatal(err)
 	}
+		//s := gocron.NewScheduler()
+  //s.Every(1).Minutes().Do(dao.TestAggregate)
+  //<- s.Start()
 }
 
 
@@ -161,3 +163,4 @@ func respondWithJson(w http.ResponseWriter, code int, payload interface{}) {
 	w.WriteHeader(code)
 	w.Write(response)
 }*/
+//origin	https://github.com/shahulsardonyxgit/Project.git (push)

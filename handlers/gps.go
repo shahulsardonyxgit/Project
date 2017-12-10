@@ -1,28 +1,28 @@
 package gpsHandlers
 
 import(
-  "fmt"
+//  "fmt"
   "encoding/json"
-  "log"
+//  "log"
   "net/http"
-  "gopkg.in/mgo.v2"
+  //"gopkg.in/mgo.v2"
   "gopkg.in/mgo.v2/bson"
   "github.com/gorilla/mux"
-  "github.com/Projects/truck_gps_app/db/config"
+//  "github.com/Projects/truck_gps_app/db/config"
   "github.com/Projects/truck_gps_app/db/dao"
   "github.com/Projects/truck_gps_app/db/models"
-  "github.com/spf13/viper"
-  "os"
-  "github.com/jasonlvhit/gocron"
+  //"github.com/spf13/viper"
+  //"os"
+  //"github.com/jasonlvhit/gocron"
 )
 
 // get config and dao
-var config1 = config.Config{}
-var dao1 = dao.GpsDAO{}
+//var config1 = config.Config{}
+//var dao1 = dao.GpsDAO{}
 
 //function to get all gps data
 func AllGPSEndPoint(w http.ResponseWriter, r *http.Request) {
-	gps, err := dao1.FindAll()
+	gps, err := dao.FindAll()
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
@@ -33,7 +33,7 @@ func AllGPSEndPoint(w http.ResponseWriter, r *http.Request) {
 //function to find gps data
 func FindGPSEndpoint(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	gp, err := dao1.FindById(params["id"])
+	gp, err := dao.FindById(params["id"])
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid Movie ID")
 		return
@@ -51,7 +51,7 @@ func CreateGPSEndPoint(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	gp.ID = bson.NewObjectId()
-	if err := dao1.Insert(gp); err != nil {
+	if err := dao.Insert(gp); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -66,7 +66,7 @@ func UpdateGPSEndPoint(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
-	if err := dao1.Update(gp); err != nil {
+	if err := dao.Update(gp); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -81,7 +81,7 @@ func DeleteGPSEndPoint(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
-	if err := dao1.Delete(gp); err != nil {
+	if err := dao.Delete(gp); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
