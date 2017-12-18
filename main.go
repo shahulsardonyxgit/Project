@@ -4,6 +4,7 @@ import (
 //	"strconv"
 	//"fmt"
 	//"encoding/json"
+	//"sync"
 	"log"
 	//"io/ioutil"
 	"net/http"
@@ -36,7 +37,7 @@ func DoHTTPGet(url string, ch chan<- HTTPResponse) {
 
 func main() {
 
-
+//  var wg sync.WaitGroup
 	r := mux.NewRouter()
 //code for cron every Minutes
 
@@ -55,6 +56,9 @@ func main() {
 	if err := http.ListenAndServe(config.Port1, r); err != nil {
 		log.Fatal(err)
 	}
+	//wg.Wait()
+  //fmt.Println("Done")
+
 		//s := gocron.NewScheduler()
   //s.Every(1).Minutes().Do(dao.TestAggregate)
   //<- s.Start()

@@ -1,6 +1,7 @@
 package gpsHandlers
 
 import(
+  "sync"
   "fmt"
   "reflect"
   "encoding/json"
@@ -45,12 +46,14 @@ func FindGPSEndpoint(w http.ResponseWriter, r *http.Request) {
 
 //create new gps data
 func CreateGPSEndPoint(w http.ResponseWriter, ch *http.Request) {
+  var wg sync.WaitGroup
   //1.create channel of type request
   getRequest:=make(chan *http.Request,1)
 
   //2.send request to channel inside go func
   getRequest <- ch
 
+  wg.Add(1)
   go func(){
 //}()
   //3.recieve request from channel
@@ -68,7 +71,13 @@ func CreateGPSEndPoint(w http.ResponseWriter, ch *http.Request) {
 		return
 	}
 	respondWithJson(w, http.StatusCreated, gp)
+  wg.Done()
+
 }()//end of go func
+close(getRequest)//close the channel
+wg.Wait()
+fmt.Println("Done")
+
 }
 
 //update gps data
