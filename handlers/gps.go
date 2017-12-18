@@ -1,7 +1,8 @@
 package gpsHandlers
 
 import(
-//  "fmt"
+  "fmt"
+  "reflect"
   "encoding/json"
 //  "log"
   "net/http"
@@ -27,6 +28,7 @@ func AllGPSEndPoint(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
+  fmt.Println("gps is a type of: ", reflect.TypeOf(gps))
 	respondWithJson(w, http.StatusOK, gps)
 }
 
@@ -42,7 +44,17 @@ func FindGPSEndpoint(w http.ResponseWriter, r *http.Request) {
 }
 
 //create new gps data
-func CreateGPSEndPoint(w http.ResponseWriter, r *http.Request) {
+func CreateGPSEndPoint(w http.ResponseWriter, ch *http.Request) {
+  //1.create channel of type request
+  getRequest:=make(chan *http.Request,1)
+
+  //2.send request to channel inside go func
+  getRequest <- ch
+
+  go func(){
+//}()
+  //3.recieve request from channel
+  r:=<-getRequest
 	defer r.Body.Close()
 	var gp models.GPS
 	if err := json.NewDecoder(r.Body).Decode(&gp); err != nil {
@@ -56,6 +68,7 @@ func CreateGPSEndPoint(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	respondWithJson(w, http.StatusCreated, gp)
+}()//end of go func
 }
 
 //update gps data

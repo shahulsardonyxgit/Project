@@ -5,6 +5,7 @@ import (
 	//"fmt"
 	//"encoding/json"
 	"log"
+	//"io/ioutil"
 	"net/http"
 	//"gopkg.in/mgo.v2"
 	//"gopkg.in/mgo.v2/bson"
@@ -18,48 +19,32 @@ import (
 	//"github.com/jasonlvhit/gocron"
 )
 
-//var Port1 string
-//var config1 = config.Config{}
-//var dao1 = dao.MoviesDAO{}
-//var dao1 = dao.GpsDAO{}
+//Define a new structure that represents out API response (response status and body)
+/*type HTTPResponse struct {
+    status string
+    body   []byte
+}
 
-// Parse the configuration file 'config.toml', and establish a connection to DB
-/*func init() {
-//check default env variable
-/*	viper.SetDefault("PORT",1234)
-  getPort := viper.GetInt("PORT")
-	//viper.SetDefault("SERVER", "localhost")
-  getServer := config1.Server
-//	viper.SetDefault("DATABASE", "movies_db")
-//  getDatabase := viper.GetString("DATABASE")
-    getDatabase :=config1.Database
-				show := func(key string) {
-	val, ok := os.LookupEnv(key)
-		if ok {
+func DoHTTPGet(url string, ch chan<- HTTPResponse) {
+    //Execute the HTTP get
+    httpResponse, _ := http.Get(url)
+    httpBody, _ := ioutil.ReadAll(httpResponse.Body)
+    //Send an HTTPResponse back to the channel
+    ch <- HTTPResponse{httpResponse.Status, httpBody}
+}*/
 
-			fmt.Printf("%s=%s\n", key, val)
-     	Port1=fmt.Sprintf(":%d", getPort)
-			dao1.Server=getServer
-			dao1.Database=getDatabase
-			dao1.Port=getPort
-		} else {*/
-//read env variables from the file
-	/*config1.Read()
-	dao1.Server = config1.Server
-	dao1.Database = config1.Database
-	dao1.Port=config1.Port
-	Port1=fmt.Sprintf(":%d", dao1.Port)
-	dao1.Connect()
-*/
-//}//end of if else
 
-//}//end of func show
-//show("USER")
-//}*///end of init
-// Define HTTP request routes
 func main() {
+
+
 	r := mux.NewRouter()
 //code for cron every Minutes
+
+//Define a new channel
+/*  var ch chan HTTPResponse = make(chan HTTPResponse)
+  url:="localhost:3000/gps"
+  go DoHTTPGet(url, ch)
+	fmt.Println((<-ch).status)*/
 
 
 	r.HandleFunc("/gps", gpsHandlers.AllGPSEndPoint).Methods("GET")
